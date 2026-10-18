@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ad Campaign Assistant</title>
+<style>
+:root{--bg:#faf8f5;--card:#fff;--ink:#1f1d1a;--mute:#6b665f;--line:#e4dfd7;--accent:#c2410c;--accent-ink:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171513;--card:#201d1a;--ink:#f3efe9;--mute:#a39c92;--line:#35302a;--accent:#fb923c;--accent-ink:#1a1209}}
+:root[data-theme="dark"]{--bg:#171513;--card:#201d1a;--ink:#f3efe9;--mute:#a39c92;--line:#35302a;--accent:#fb923c;--accent-ink:#1a1209}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:680px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.6rem;margin:8px 0 4px;letter-spacing:-.02em}
+.sub{color:var(--mute);margin:0 0 18px}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-weight:600;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+label:first-child{margin-top:0}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:90px;resize:vertical}
+.go{margin-top:16px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:700;cursor:pointer}
+.go:disabled{opacity:.6}
+#out{margin-top:16px;display:none}
+#out h3{margin:16px 0 4px;font-size:1.05rem}
+#out h3:first-child{margin-top:0}
+#out ul{padding-left:20px;margin:4px 0}
+#out p{margin:6px 0}
+.note{color:var(--mute);font-size:.82rem;margin-top:14px}
+.err{color:#b91c1c}
+.hide{display:none}
+#shotinfo{margin:6px 0 0}
+</style>
+</head>
+<body>
+<main>
+<h1>Ad Campaign Assistant</h1>
+<p class="sub">Creative ideas and a testing plan, or a read on your campaign data. No performance promises.</p>
+
+<div class="tabs">
+<button id="t1" aria-pressed="true">Plan a campaign</button>
+<button id="t2" aria-pressed="false">Read my data</button>
+</div>
+
+<div class="card">
+<div id="plan">
+<label for="product">Product or service</label>
+<input id="product" placeholder="e.g. handmade leather dog collars">
+<label for="aud">Target audience</label>
+<input id="aud" placeholder="e.g. urban dog owners, 25–40">
+<label for="obj">Campaign objective</label>
+<select id="obj"><option>Sales</option><option>Leads</option><option>Website traffic</option><option>Brand awareness</option><option>App installs</option></select>
+<label for="bud">Budget range</label>
+<input id="bud" placeholder="e.g. $500–$1,000 per month">
+<label for="plat">Platforms (optional)</label>
+<input id="plat" placeholder="e.g. Meta, Google Search, TikTok">
+</div>
+
+<div id="data" class="hide">
+<label for="ctx">Campaign context</label>
+<input id="ctx" placeholder="e.g. Meta conversion campaign, 2 weeks old">
+<label for="shots">Screenshots of the post, comments and stats</label>
+<input id="shots" type="file" accept="image/*" multiple>
+<div id="shotinfo" class="note"></div>
+<label for="pasted">Comments or numbers as text (optional)</label>
+<textarea id="pasted" placeholder="Paste comments, or impressions, clicks, spend, conversions"></textarea>
+</div>
+
+<button class="go" id="go">Generate</button>
+</div>
+
+<div id="out" class="card" aria-live="polite"></div>
+<p class="note">Suggestions are starting points to test, not forecasts. Results depend on your market, offer, and platform.</p>
+</main>
+
+<script>
+let mode = "plan", sample = null, imgLimits = null, files = [];
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+function setMode(m){
+  mode = m;
+  $("plan").classList.toggle("hide", m !== "plan");
+  $("data").classList.toggle("hide", m !== "data");
+  $("t1").setAttribute("aria-pressed", m === "plan");
+  $("t2").setAttribute("aria-pressed", m === "data");
+  $("out").style.display = "none";
+}
+$("t1").onclick = () => setMode("plan");
+$("t2").onclick = () => setMode("data");
+
+function md(t){
+  const lines = esc(t).split("\n"); let h = "", inList = false;
+  const inline = s => s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  for (const raw of lines){
+    const l = raw.trim();
+    if (/^[-*] /.test(l)){ if(!inList){h+="<ul>";inList=true} h += "<li>"+inline(l.slice(2))+"</li>"; continue; }
+    if (inList){h+="</ul>";inList=false}
+    if (/^#{1,4} /.test(l)) h += "<h3>"+inline(l.replace(/^#+ /,""))+"</h3>";
+    else if (l) h += "<p>"+inline(l)+"</p>";
+  }
+  return h + (inList ? "</ul>" : "");
+}
+
+const RULES = "You are a careful paid-advertising strategist. Never promise or predict specific results, ROI, or rankings. Frame ideas as hypotheses to test. Avoid claims that could breach ad policies (health, income, before/after). Use ## headings and short bullet points. Be concise and practical.";
+
+async function run(){
+  let prompt;
+  if (mode === "plan"){
+    const v = k => $(k).value.trim();
+    if (!v("product") || !v("aud")){ show("<p class='err'>Add at least a product and an audience.</p>"); return; }
+    prompt = RULES + "\n\nCreate a campaign plan.\nProduct: " + v("product") + "\nAudience: " + v("aud") + "\nObjective: " + $("obj").value + "\nBudget: " + (v("bud") || "not given") + "\nPlatforms: " + (v("plat") || "suggest suitable ones") +
+      "\n\nSections, in order: Creative angles (4), Headline variations (8, with character-count awareness), Ad formats worth trying, Landing page considerations, Testing checklist (what to test first, how long to run it, what budget split is sensible for the stated budget).";
+  } else {
+    if (!$("pasted").value.trim() && !files.length){ show("<p class='err'>Add at least one screenshot or some pasted text first.</p>"); return; }
+    prompt = RULES + "\n\nHelp interpret how a social media post or ad is performing. Context: " + ($("ctx").value.trim() || "not given") +
+      (files.length ? "\nThe attached images are screenshots of the post, its comments and/or its stats. Read only what is visible; say so if something is unreadable or cut off." : "") +
+      ($("pasted").value.trim() ? "\nPasted text:\n" + $("pasted").value : "") +
+      "\n\nSections, in order: What I can see (post, visible engagement numbers, and how many comments you actually read), Comment themes (praise, complaints, questions, jokes or spam; whether criticism targets the product, price, the ad itself, or something unrelated), Sentiment read (state how limited it is by comment count and by comments being a self-selected group), Possible explanations (as hypotheses), What to investigate next (ranked), Suggested replies or responses if there is criticism, Data gaps. Do not call something public outrage unless the visible volume genuinely supports it. Never identify or name individual commenters beyond what is quoted briefly.";
+  }
+  const btn = $("go"); btn.disabled = true; btn.textContent = "Working…";
+  show("<p>Thinking…</p>");
+  try{
+    if (!sample) sample = await claude.use("sample");
+    if (!sample){ show("<p class='err'>This tool needs Claude access, which isn’t available in this view.</p>"); return; }
+    await sample(prompt, {modelTier:"default", cache:false, images: mode === "data" && files.length ? files : undefined, onText: ({text}) => show(md(text))});
+  }catch(e){
+    show("<p class='err'>" + (e && e.code === "rate_limited" ? "Too many requests. Please wait a moment." : "Couldn’t generate a response. Please try again.") + "</p>");
+  }finally{ btn.disabled = false; btn.textContent = "Generate"; }
+}
+function show(html){ const o = $("out"); o.style.display = "block"; o.innerHTML = html; }
+$("shots").onchange = e => {
+  files = Array.from(e.target.files || []);
+  const max = imgLimits ? imgLimits.maxCount : 5;
+  let msg = files.length ? files.length + " screenshot" + (files.length > 1 ? "s" : "") + " selected." : "";
+  if (files.length > max){ files = files.slice(0, max); msg = "Only the first " + max + " screenshots will be used."; }
+  const big = imgLimits ? files.filter(f => f.size > imgLimits.maxInputBytes).length : 0;
+  if (big){ files = files.filter(f => f.size <= imgLimits.maxInputBytes); msg += " " + big + " file(s) were too large and skipped."; }
+  $("shotinfo").textContent = msg;
+};
+(async () => {
+  try{
+    sample = await claude.use("sample");
+    const l = sample && await sample.limits();
+    imgLimits = l && l.images ? l.images : null;
+    if (imgLimits) $("shots").accept = imgLimits.mediaTypes.join(",");
+    else { $("shots").disabled = true; $("shotinfo").textContent = "Screenshot upload isn’t available in this view. You can paste text instead."; }
+  }catch(e){ $("shots").disabled = true; }
+})();
+$("go").onclick = run;
+</script>
+</body>
+</html>
