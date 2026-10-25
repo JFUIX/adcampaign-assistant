@@ -5,39 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ad Campaign Assistant</title>
 <style>
-:root{color-scheme:dark;--bg:#002722;--card:#00332e;--ink:#eafffa;--mute:#9ac5bc;--line:#17645b;--accent:#015049;--accent-2:#003D37;--accent-ink:#f0fffc;--glow:rgba(1,80,73,.28);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{color-scheme:dark;--bg:#050807;--surface:#07110f;--panel:#091714;--ink:#f5fffc;--mute:#b2c6c0;--line:#17665b;--grid:rgba(1,80,73,.24);--accent:#015049;--accent-2:#003D37;--glow:rgba(1,80,73,.2);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px);background:#002722}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 12% 0%,rgba(1,80,73,.6),transparent 42%),radial-gradient(ellipse at 92% 16%,rgba(0,61,55,.72),transparent 38%),linear-gradient(145deg,#002722 0%,#003D37 54%,#001c19 100%);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:720px;margin:0 auto;padding:42px 18px 56px;position:relative}
-main:before{content:"";display:block;height:3px;width:100%;margin-bottom:30px;border-radius:99px;background:linear-gradient(90deg,#015049,#21b5a0,#4ad9bc);box-shadow:0 0 24px rgba(1,80,73,.5)}
-h1{font-size:clamp(1.8rem,5vw,2.35rem);margin:8px 0 8px;letter-spacing:-.045em;line-height:1.15;background:linear-gradient(95deg,#eafffa 8%,#79e0ca 62%,#b4f5e7 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--mute);margin:0 0 24px;max-width:58ch}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#050807}
+body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;background-color:#050807;background-image:radial-gradient(ellipse at left top,rgba(1,80,73,.95) 0%,rgba(0,61,55,.68) 20%,rgba(0,39,34,.24) 42%,transparent 62%),linear-gradient(rgba(1,80,73,.095) 1px,transparent 1px),linear-gradient(90deg,rgba(1,80,73,.095) 1px,transparent 1px),linear-gradient(135deg,#003D37 0%,#002722 30%,#050807 72%,#020403 100%);background-size:auto,36px 36px,36px 36px,cover;background-attachment:fixed}
+main{max-width:760px;margin:0 auto;padding:42px 18px 56px;position:relative}
+main:before{content:"";display:block;height:3px;width:100%;margin-bottom:30px;border-radius:99px;background:linear-gradient(90deg,#015049,#21b5a0,#4ad9bc,rgba(74,217,188,0));box-shadow:0 0 24px rgba(1,80,73,.42)}
+h1{font-size:clamp(1.8rem,5vw,2.45rem);margin:8px 0;letter-spacing:-.045em;line-height:1.15;color:#fff}
+.sub{color:#d0e1dc;margin:0 0 24px;max-width:58ch}
 .tabs{display:flex;gap:8px;margin-bottom:14px}
-.tabs button{flex:1;padding:12px 14px;border:1px solid var(--line);background:rgba(0,39,34,.8);color:var(--mute);border-radius:12px;font:inherit;font-weight:650;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-.tabs button:hover{border-color:#2c9b89;color:var(--ink)}
-.tabs button[aria-pressed="true"]{background:linear-gradient(110deg,#015049,#087a6d 58%,#003D37);color:#f0fffc;border-color:#2ca995;box-shadow:0 8px 26px rgba(1,80,73,.3)}
-.card{background:linear-gradient(145deg,rgba(0,61,55,.97),rgba(0,39,34,.98));border:1px solid #17645b;border-radius:18px;padding:22px;box-shadow:0 18px 55px rgba(0,0,0,.2),0 0 35px var(--glow)}
-label{display:block;font-weight:650;font-size:.9rem;margin:14px 0 6px;color:#d8f7ef}
+.tabs button{flex:1;padding:12px 14px;border:1px solid #17665b;background:rgba(3,12,10,.88);color:#d6e8e2;border-radius:12px;font:inherit;font-weight:650;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.tabs button:hover{border-color:#2ca995;color:#fff;background:#06211c}
+.tabs button[aria-pressed="true"]{background:linear-gradient(115deg,#015049,#003D37);color:#fff;border-color:#38bda7;box-shadow:0 0 0 1px rgba(56,189,167,.12),0 8px 26px rgba(1,80,73,.25)}
+.card{background:linear-gradient(145deg,rgba(5,17,14,.97),rgba(2,8,7,.98));border:1px solid #17665b;border-radius:18px;padding:22px;box-shadow:0 18px 55px rgba(0,0,0,.38),0 0 28px rgba(1,80,73,.12)}
+label{display:block;font-weight:650;font-size:.9rem;margin:14px 0 6px;color:#f0fffb}
 label:first-child{margin-top:0}
-input,select,textarea{width:100%;padding:12px 13px;border:1px solid #17645b;border-radius:10px;background:#002722;color:var(--ink);font:inherit;outline:none;transition:border-color .18s,box-shadow .18s}
-input::placeholder,textarea::placeholder{color:#78a79d}
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid #17665b;border-radius:10px;background:#030a08;color:#fff;font:inherit;outline:none;transition:border-color .18s,box-shadow .18s}
+input::placeholder,textarea::placeholder{color:#9aafa8}
 input:focus,select:focus,textarea:focus{border-color:#35c5ac;box-shadow:0 0 0 3px rgba(53,197,172,.15)}
 select{color-scheme:dark}
 textarea{min-height:110px;resize:vertical}
-.go{margin-top:18px;width:100%;padding:13px 16px;border:1px solid rgba(90,220,196,.4);border-radius:11px;background:linear-gradient(105deg,#015049,#087a6d 58%,#003D37);color:#f0fffc;font:inherit;font-weight:750;cursor:pointer;box-shadow:0 8px 25px rgba(1,80,73,.28);transition:filter .2s,transform .2s}
-.go:hover{filter:brightness(1.12);transform:translateY(-1px)}
+input[type=file]{color:#e4f5ef}
+.go{margin-top:18px;width:100%;padding:13px 16px;border:1px solid #35a994;border-radius:11px;background:linear-gradient(110deg,#015049,#003D37);color:#fff;font:inherit;font-weight:750;cursor:pointer;box-shadow:0 8px 25px rgba(1,80,73,.25);transition:filter .2s,transform .2s}
+.go:hover{filter:brightness(1.16);transform:translateY(-1px)}
 .go:disabled{opacity:.6;cursor:wait;transform:none}
-#out{margin-top:16px;display:none;overflow-wrap:anywhere}
-#out h3{margin:16px 0 4px;font-size:1.05rem;color:#7be0cc}
+#out{margin-top:16px;display:none;overflow-wrap:anywhere;color:#f5fffc}
+#out h3{margin:16px 0 4px;font-size:1.05rem;color:#76e5d0}
 #out h3:first-child{margin-top:0}
 #out ul{padding-left:20px;margin:4px 0}
 #out li{padding:2px 0}
 #out p{margin:6px 0}
-.note{color:#8cb9ae;font-size:.82rem;margin-top:14px}
+.note{color:#b2c6c0;font-size:.82rem;margin-top:14px}
 .err{color:#ffaaa9}
 .hide{display:none}
 #shotinfo{margin:6px 0 0}
+button:focus-visible{outline:2px solid #69e2cb;outline-offset:3px}
 @media(max-width:520px){main{padding:26px 14px 38px}.card{padding:17px}.tabs button{padding:10px 8px;font-size:.92rem}}
 </style>
 </head>
