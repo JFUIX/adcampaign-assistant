@@ -17,6 +17,14 @@ The idea is to help organize the first round of thinking: generate creative angl
 - Calls out possible explanations, data gaps, and useful next steps.
 - Avoids treating limited comments or incomplete screenshots as proof of broad public opinion.
 
+## Screenshots
+
+### Campaign Planner
+![Campaign planner interface](screenshots/campaign-planner.svg)
+
+### Campaign Data Review
+![Campaign data review interface](screenshots/data-review.svg)
+
 ## Built with
 
 - HTML
