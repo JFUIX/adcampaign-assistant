@@ -4,161 +4,462 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ad Campaign Assistant</title>
+<meta name="description" content="Creative ideas and a testing plan, or a read on your campaign data. No performance promises.">
 <style>
-:root{color-scheme:dark;--bg:#050807;--surface:#07110f;--panel:#091714;--ink:#f5fffc;--mute:#b2c6c0;--line:#17665b;--grid:rgba(1,80,73,.24);--accent:#015049;--accent-2:#003D37;--glow:rgba(1,80,73,.2);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px);background:#050807}
-body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;background-color:#050807;background-image:radial-gradient(ellipse at left top,rgba(1,80,73,.95) 0%,rgba(0,61,55,.68) 20%,rgba(0,39,34,.24) 42%,transparent 62%),linear-gradient(rgba(1,80,73,.095) 1px,transparent 1px),linear-gradient(90deg,rgba(1,80,73,.095) 1px,transparent 1px),linear-gradient(135deg,#003D37 0%,#002722 30%,#050807 72%,#020403 100%);background-size:auto,36px 36px,36px 36px,cover;background-attachment:fixed}
-main{max-width:760px;margin:0 auto;padding:42px 18px 56px;position:relative}
-main:before{content:"";display:block;height:3px;width:100%;margin-bottom:30px;border-radius:99px;background:linear-gradient(90deg,#015049,#21b5a0,#4ad9bc,rgba(74,217,188,0));box-shadow:0 0 24px rgba(1,80,73,.42)}
-h1{font-size:clamp(1.8rem,5vw,2.45rem);margin:8px 0;letter-spacing:-.045em;line-height:1.15;color:#fff}
-.sub{color:#d0e1dc;margin:0 0 24px;max-width:58ch}
-.tabs{display:flex;gap:8px;margin-bottom:14px}
-.tabs button{flex:1;padding:12px 14px;border:1px solid #17665b;background:rgba(3,12,10,.88);color:#d6e8e2;border-radius:12px;font:inherit;font-weight:650;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-.tabs button:hover{border-color:#2ca995;color:#fff;background:#06211c}
-.tabs button[aria-pressed="true"]{background:linear-gradient(115deg,#015049,#003D37);color:#fff;border-color:#38bda7;box-shadow:0 0 0 1px rgba(56,189,167,.12),0 8px 26px rgba(1,80,73,.25)}
-.card{background:linear-gradient(145deg,rgba(5,17,14,.97),rgba(2,8,7,.98));border:1px solid #17665b;border-radius:18px;padding:22px;box-shadow:0 18px 55px rgba(0,0,0,.38),0 0 28px rgba(1,80,73,.12)}
-label{display:block;font-weight:650;font-size:.9rem;margin:14px 0 6px;color:#f0fffb}
-label:first-child{margin-top:0}
-input,select,textarea{width:100%;padding:12px 13px;border:1px solid #17665b;border-radius:10px;background:#030a08;color:#fff;font:inherit;outline:none;transition:border-color .18s,box-shadow .18s}
-input::placeholder,textarea::placeholder{color:#9aafa8}
-input:focus,select:focus,textarea:focus{border-color:#35c5ac;box-shadow:0 0 0 3px rgba(53,197,172,.15)}
-select{color-scheme:dark}
-textarea{min-height:110px;resize:vertical}
-input[type=file]{color:#e4f5ef}
-.go{margin-top:18px;width:100%;padding:13px 16px;border:1px solid #35a994;border-radius:11px;background:linear-gradient(110deg,#015049,#003D37);color:#fff;font:inherit;font-weight:750;cursor:pointer;box-shadow:0 8px 25px rgba(1,80,73,.25);transition:filter .2s,transform .2s}
-.go:hover{filter:brightness(1.16);transform:translateY(-1px)}
-.go:disabled{opacity:.6;cursor:wait;transform:none}
-#out{margin-top:16px;display:none;overflow-wrap:anywhere;color:#f5fffc}
-#out h3{margin:16px 0 4px;font-size:1.05rem;color:#76e5d0}
-#out h3:first-child{margin-top:0}
-#out ul{padding-left:20px;margin:4px 0}
-#out li{padding:2px 0}
-#out p{margin:6px 0}
-.note{color:#b2c6c0;font-size:.82rem;margin-top:14px}
-.err{color:#ffaaa9}
-.hide{display:none}
-#shotinfo{margin:6px 0 0}
-button:focus-visible{outline:2px solid #69e2cb;outline-offset:3px}
-@media(max-width:520px){main{padding:26px 14px 38px}.card{padding:17px}.tabs button{padding:10px 8px;font-size:.92rem}}
+  :root {
+    --bg: #f5f6f4;
+    --surface: #ffffff;
+    --ink: #17212b;
+    --muted: #5b6672;
+    --line: #d9ddd8;
+    --accent: #0b6b5d;
+    --accent-ink: #ffffff;
+    --accent-soft: #e2f0ed;
+    --warn: #8a5a00;
+    --warn-soft: #fff4dc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12171c;
+      --surface: #1a2128;
+      --ink: #e8ecef;
+      --muted: #9aa5af;
+      --line: #2c3640;
+      --accent: #4fc3ae;
+      --accent-ink: #08201b;
+      --accent-soft: #17302b;
+      --warn: #f0c36a;
+      --warn-soft: #2e2512;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  main { max-width: 680px; margin: 0 auto; padding: 32px 20px 56px; }
+  h1 { font-size: 1.9rem; line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .lede { color: var(--muted); margin: 0 0 24px; max-width: 52ch; }
+  h2 { font-size: 1.15rem; margin: 0 0 12px; }
+  h3 { font-size: 1rem; margin: 20px 0 6px; }
+
+  .tabs { display: flex; gap: 4px; padding: 4px; background: var(--line); border-radius: 10px; margin-bottom: 20px; }
+  .tabs button {
+    flex: 1; border: 0; background: transparent; color: var(--muted);
+    font: inherit; font-weight: 600; padding: 10px 12px; border-radius: 7px; cursor: pointer;
+  }
+  .tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+
+  form, .result { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .field { margin-bottom: 16px; }
+  label, legend { display: block; font-weight: 600; font-size: .92rem; margin-bottom: 6px; padding: 0; }
+  .hint { color: var(--muted); font-weight: 400; }
+  input[type="text"], select, textarea {
+    width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
+  }
+  textarea { min-height: 96px; resize: vertical; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible {
+    outline: 3px solid var(--accent); outline-offset: 2px;
+  }
+  fieldset { border: 0; margin: 0 0 16px; padding: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips label {
+    display: inline-flex; align-items: center; gap: 6px; margin: 0; font-weight: 500;
+    border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  }
+  .chips input { accent-color: var(--accent); margin: 0; }
+  .chips label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
+
+  .primary {
+    width: 100%; border: 0; border-radius: 10px; background: var(--accent); color: var(--accent-ink);
+    font: inherit; font-weight: 700; padding: 13px 16px; cursor: pointer;
+  }
+  .primary:hover { filter: brightness(1.08); }
+  .secondary {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    font: inherit; font-weight: 600; padding: 8px 14px; border-radius: 8px; cursor: pointer;
+  }
+
+  .previews { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .previews figure { margin: 0; position: relative; }
+  .previews img { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); display: block; }
+
+  .result { margin-top: 24px; }
+  .result[hidden], [hidden] { display: none !important; }
+  .result ul, .result ol { padding-left: 1.2rem; margin: 6px 0; }
+  .result li { margin-bottom: 6px; }
+  .angle { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; margin: 10px 0; }
+  .angle strong { display: block; }
+  .angle span { color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 8px 0; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .scroll { overflow-x: auto; }
+  .note { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin: 12px 0; }
+  .actions { display: flex; gap: 8px; margin-top: 16px; }
+  .disclaimer { color: var(--muted); font-size: .85rem; margin-top: 28px; max-width: 60ch; }
+  .error { color: #b3261e; font-size: .88rem; margin-top: 4px; }
+  @media (prefers-color-scheme: dark) { .error { color: #ff8a80; } }
 </style>
 </head>
 <body>
 <main>
-<h1>Ad Campaign Assistant</h1>
-<p class="sub">Creative ideas and a testing plan, or a read on your campaign data. No performance promises.</p>
+  <h1>Ad Campaign Assistant</h1>
+  <p class="lede">Creative ideas and a testing plan, or a read on your campaign data. No performance promises.</p>
 
-<div class="tabs">
-<button id="t1" aria-pressed="true">Plan a campaign</button>
-<button id="t2" aria-pressed="false">Read my data</button>
-</div>
+  <div class="tabs" role="tablist" aria-label="Mode">
+    <button role="tab" id="tab-plan" aria-selected="true" aria-controls="panel-plan" type="button">Plan a campaign</button>
+    <button role="tab" id="tab-read" aria-selected="false" aria-controls="panel-read" type="button">Read my data</button>
+  </div>
 
-<div class="card">
-<div id="plan">
-<label for="product">Product or service</label>
-<input id="product" placeholder="e.g. handmade leather dog collars">
-<label for="aud">Target audience</label>
-<input id="aud" placeholder="e.g. urban dog owners, 25–40">
-<label for="obj">Campaign objective</label>
-<select id="obj"><option>Sales</option><option>Leads</option><option>Website traffic</option><option>Brand awareness</option><option>App installs</option></select>
-<label for="bud">Budget range</label>
-<input id="bud" placeholder="e.g. $500–$1,000 per month">
-<label for="plat">Platforms (optional)</label>
-<input id="plat" placeholder="e.g. Meta, Google Search, TikTok">
-</div>
+  <!-- PLAN -->
+  <form id="panel-plan" role="tabpanel" aria-labelledby="tab-plan" novalidate>
+    <div class="field">
+      <label for="product">Product or service</label>
+      <input type="text" id="product" placeholder="e.g. handmade candles, bookkeeping for freelancers" autocomplete="off">
+      <div class="error" id="err-product" hidden>Enter a product or service.</div>
+    </div>
+    <div class="field">
+      <label for="audience">Target audience</label>
+      <input type="text" id="audience" placeholder="e.g. women 25–40 who like home decor" autocomplete="off">
+      <div class="error" id="err-audience" hidden>Describe who you want to reach.</div>
+    </div>
+    <div class="field">
+      <label for="objective">Campaign objective</label>
+      <select id="objective">
+        <option>Sales</option>
+        <option>Leads</option>
+        <option>Website traffic</option>
+        <option>Brand awareness</option>
+        <option>App installs</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="budget">Budget range</label>
+      <select id="budget">
+        <option value="low">Under $500 / month</option>
+        <option value="mid" selected>$500–$3,000 / month</option>
+        <option value="high">Over $3,000 / month</option>
+      </select>
+    </div>
+    <fieldset>
+      <legend>Platforms <span class="hint">(optional)</span></legend>
+      <div class="chips">
+        <label><input type="checkbox" name="platform" value="Facebook"> Facebook</label>
+        <label><input type="checkbox" name="platform" value="Instagram"> Instagram</label>
+        <label><input type="checkbox" name="platform" value="TikTok"> TikTok</label>
+        <label><input type="checkbox" name="platform" value="Google Search"> Google Search</label>
+        <label><input type="checkbox" name="platform" value="YouTube"> YouTube</label>
+        <label><input type="checkbox" name="platform" value="LinkedIn"> LinkedIn</label>
+      </div>
+    </fieldset>
+    <button class="primary" type="submit">Generate</button>
+  </form>
 
-<div id="data" class="hide">
-<label for="ctx">Campaign context</label>
-<input id="ctx" placeholder="e.g. Meta conversion campaign, 2 weeks old">
-<label for="shots">Screenshots of the post, comments and stats</label>
-<input id="shots" type="file" accept="image/*" multiple>
-<div id="shotinfo" class="note"></div>
-<label for="pasted">Comments or numbers as text (optional)</label>
-<textarea id="pasted" placeholder="Paste comments, or impressions, clicks, spend, conversions"></textarea>
-</div>
+  <!-- READ -->
+  <form id="panel-read" role="tabpanel" aria-labelledby="tab-read" hidden novalidate>
+    <div class="field">
+      <label for="context">Campaign context</label>
+      <textarea id="context" placeholder="What are you promoting, to whom, and what was the goal?"></textarea>
+    </div>
+    <div class="field">
+      <label for="shots">Screenshots of the post, comments and stats</label>
+      <input type="file" id="shots" accept="image/*" multiple>
+      <div class="previews" id="previews"></div>
+    </div>
+    <div class="field">
+      <label for="stats">Comments or numbers as text <span class="hint">(optional)</span></label>
+      <textarea id="stats" placeholder="Spend: 120&#10;Impressions: 18000&#10;Clicks: 240&#10;Conversions: 6&#10;Revenue: 310"></textarea>
+    </div>
+    <button class="primary" type="submit">Generate</button>
+  </form>
 
-<button class="go" id="go">Generate</button>
-</div>
+  <section class="result" id="result" aria-live="polite" hidden></section>
 
-<div id="out" class="card" aria-live="polite"></div>
-<p class="note">Suggestions are starting points to test, not forecasts. Results depend on your market, offer, and platform.</p>
+  <p class="disclaimer">Suggestions are starting points to test, not forecasts. Results depend on your market, offer, and platform.</p>
 </main>
 
 <script>
-let mode = "plan", sample = null, imgLimits = null, files = [];
-const $ = id => document.getElementById(id);
-const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var esc = function (s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
 
-function setMode(m){
-  mode = m;
-  $("plan").classList.toggle("hide", m !== "plan");
-  $("data").classList.toggle("hide", m !== "data");
-  $("t1").setAttribute("aria-pressed", m === "plan");
-  $("t2").setAttribute("aria-pressed", m === "data");
-  $("out").style.display = "none";
-}
-$("t1").onclick = () => setMode("plan");
-$("t2").onclick = () => setMode("data");
+  /* ---------- Tabs ---------- */
+  var tabPlan = $("#tab-plan"), tabRead = $("#tab-read");
+  var panelPlan = $("#panel-plan"), panelRead = $("#panel-read"), result = $("#result");
 
-function md(t){
-  const lines = esc(t).split("\n"); let h = "", inList = false;
-  const inline = s => s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-  for (const raw of lines){
-    const l = raw.trim();
-    if (/^[-*] /.test(l)){ if(!inList){h+="<ul>";inList=true} h += "<li>"+inline(l.slice(2))+"</li>"; continue; }
-    if (inList){h+="</ul>";inList=false}
-    if (/^#{1,4} /.test(l)) h += "<h3>"+inline(l.replace(/^#+ /,""))+"</h3>";
-    else if (l) h += "<p>"+inline(l)+"</p>";
+  function showTab(which) {
+    var plan = which === "plan";
+    tabPlan.setAttribute("aria-selected", plan);
+    tabRead.setAttribute("aria-selected", !plan);
+    panelPlan.hidden = !plan;
+    panelRead.hidden = plan;
+    result.hidden = true;
+    result.innerHTML = "";
   }
-  return h + (inList ? "</ul>" : "");
-}
+  tabPlan.addEventListener("click", function () { showTab("plan"); });
+  tabRead.addEventListener("click", function () { showTab("read"); });
 
-const RULES = "You are a careful paid-advertising strategist. Never promise or predict specific results, ROI, or rankings. Frame ideas as hypotheses to test. Avoid claims that could breach ad policies (health, income, before/after). Use ## headings and short bullet points. Be concise and practical.";
+  /* ---------- Plan a campaign ---------- */
+  var objectiveInfo = {
+    "Sales": {
+      metric: "Cost per purchase and return on ad spend",
+      cta: "Shop now",
+      format: "Short product demos, before/after shots, customer proof",
+      funnel: "Start with warm audiences (site visitors, past buyers) before cold prospecting."
+    },
+    "Leads": {
+      metric: "Cost per lead and lead-to-customer rate",
+      cta: "Get a free quote",
+      format: "Problem-solution videos, lead forms, short testimonials",
+      funnel: "Keep the form short and follow up fast; lead quality matters more than lead count."
+    },
+    "Website traffic": {
+      metric: "Cost per landing page view and bounce rate",
+      cta: "Learn more",
+      format: "Curiosity-led posts, useful tips, article or guide previews",
+      funnel: "Optimise for landing page views, not clicks, so you do not pay for accidental taps."
+    },
+    "Brand awareness": {
+      metric: "Reach, frequency, and thumb-stop rate (3-second views)",
+      cta: "Meet us",
+      format: "Story-led video, founder or team faces, repeatable visual style",
+      funnel: "Cap frequency so the same people are not shown the ad too often."
+    },
+    "App installs": {
+      metric: "Cost per install and day-7 retention",
+      cta: "Install now",
+      format: "Screen recordings of one key feature, short use-case clips",
+      funnel: "Judge installs by what users do after opening the app, not install count alone."
+    }
+  };
 
-async function run(){
-  let prompt;
-  if (mode === "plan"){
-    const v = k => $(k).value.trim();
-    if (!v("product") || !v("aud")){ show("<p class='err'>Add at least a product and an audience.</p>"); return; }
-    prompt = RULES + "\n\nCreate a campaign plan.\nProduct: " + v("product") + "\nAudience: " + v("aud") + "\nObjective: " + $("obj").value + "\nBudget: " + (v("bud") || "not given") + "\nPlatforms: " + (v("plat") || "suggest suitable ones") +
-      "\n\nSections, in order: Creative angles (4), Headline variations (8, with character-count awareness), Ad formats worth trying, Landing page considerations, Testing checklist (what to test first, how long to run it, what budget split is sensible for the stated budget).";
-  } else {
-    if (!$("pasted").value.trim() && !files.length){ show("<p class='err'>Add at least one screenshot or some pasted text first.</p>"); return; }
-    prompt = RULES + "\n\nHelp interpret how a social media post or ad is performing. Context: " + ($("ctx").value.trim() || "not given") +
-      (files.length ? "\nThe attached images are screenshots of the post, its comments and/or its stats. Read only what is visible; say so if something is unreadable or cut off." : "") +
-      ($("pasted").value.trim() ? "\nPasted text:\n" + $("pasted").value : "") +
-      "\n\nSections, in order: What I can see (post, visible engagement numbers, and how many comments you actually read), Comment themes (praise, complaints, questions, jokes or spam; whether criticism targets the product, price, the ad itself, or something unrelated), Sentiment read (state how limited it is by comment count and by comments being a self-selected group), Possible explanations (as hypotheses), What to investigate next (ranked), Suggested replies or responses if there is criticism, Data gaps. Do not call something public outrage unless the visible volume genuinely supports it. Never identify or name individual commenters beyond what is quoted briefly.";
+  var budgetInfo = {
+    low: {
+      label: "Under $500 / month",
+      split: "Run one campaign with 2 ad sets at most. Spreading a small budget thin delays learning.",
+      test: "Test one variable at a time: creative first, audience second.",
+      days: "Give each test 5–7 days before judging it."
+    },
+    mid: {
+      label: "$500–$3,000 / month",
+      split: "Use a testing campaign (about 30% of budget) and a scaling campaign for what works (about 70%).",
+      test: "Test 3 creatives against 1–2 audiences, then promote the strongest.",
+      days: "Give each test 4–7 days or until each ad has enough results to compare."
+    },
+    high: {
+      label: "Over $3,000 / month",
+      split: "Separate prospecting, retargeting and testing campaigns, with a fixed share held back for new creative.",
+      test: "Run structured tests of creative angles, offers and audiences in parallel.",
+      days: "Review weekly and refresh creative before it fatigues."
+    }
+  };
+
+  function platformTips(platforms) {
+    var tips = {
+      "Facebook": "Facebook: broad or interest audiences plus a retargeting pool; feed and Reels placements.",
+      "Instagram": "Instagram: vertical video for Reels and Stories; keep the first 2 seconds visual.",
+      "TikTok": "TikTok: native-looking, creator-style video; avoid polished ad look.",
+      "Google Search": "Google Search: group keywords by intent; write ads that mirror the search phrase.",
+      "YouTube": "YouTube: hook before the skip button at 5 seconds; state the offer early.",
+      "LinkedIn": "LinkedIn: target by job title or industry; lead with a business problem."
+    };
+    if (!platforms.length) {
+      return ["No platform chosen: pick the one where your audience already spends time, and start with a single platform."];
+    }
+    return platforms.map(function (p) { return tips[p]; });
   }
-  const btn = $("go"); btn.disabled = true; btn.textContent = "Working…";
-  show("<p>Thinking…</p>");
-  try{
-    if (!sample) sample = await claude.use("sample");
-    if (!sample){ show("<p class='err'>This tool needs Claude access, which isn’t available in this view.</p>"); return; }
-    await sample(prompt, {modelTier:"default", cache:false, images: mode === "data" && files.length ? files : undefined, onText: ({text}) => show(md(text))});
-  }catch(e){
-    show("<p class='err'>" + (e && e.code === "rate_limited" ? "Too many requests. Please wait a moment." : "Couldn’t generate a response. Please try again.") + "</p>");
-  }finally{ btn.disabled = false; btn.textContent = "Generate"; }
-}
-function show(html){ const o = $("out"); o.style.display = "block"; o.innerHTML = html; }
-$("shots").onchange = e => {
-  files = Array.from(e.target.files || []);
-  const max = imgLimits ? imgLimits.maxCount : 5;
-  let msg = files.length ? files.length + " screenshot" + (files.length > 1 ? "s" : "") + " selected." : "";
-  if (files.length > max){ files = files.slice(0, max); msg = "Only the first " + max + " screenshots will be used."; }
-  const big = imgLimits ? files.filter(f => f.size > imgLimits.maxInputBytes).length : 0;
-  if (big){ files = files.filter(f => f.size <= imgLimits.maxInputBytes); msg += " " + big + " file(s) were too large and skipped."; }
-  $("shotinfo").textContent = msg;
-};
-(async () => {
-  try{
-    sample = await claude.use("sample");
-    const l = sample && await sample.limits();
-    imgLimits = l && l.images ? l.images : null;
-    if (imgLimits) $("shots").accept = imgLimits.mediaTypes.join(",");
-    else { $("shots").disabled = true; $("shotinfo").textContent = "Screenshot upload isn’t available in this view. You can paste text instead."; }
-  }catch(e){ $("shots").disabled = true; }
+
+  function angles(product, audience, obj) {
+    var o = objectiveInfo[obj];
+    return [
+      { name: "The problem you solve",
+        idea: "Open on the frustration " + audience + " already feel, then show how " + product + " removes it." },
+      { name: "Proof",
+        idea: "Real customer words, results or a short demo of " + product + ". Use only claims you can back up." },
+      { name: "Behind the scenes",
+        idea: "Show how " + product + " is made or delivered. Builds trust with people who have not heard of you." },
+      { name: "Objection busting",
+        idea: "Answer the top doubt " + audience + " have (price, time, quality) in the first line." },
+      { name: "Clear offer",
+        idea: "State one concrete offer and one action: \u201C" + o.cta + ".\u201D Avoid stacking several asks." }
+    ];
+  }
+
+  panelPlan.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var product = $("#product").value.trim();
+    var audience = $("#audience").value.trim();
+    var obj = $("#objective").value;
+    var budget = budgetInfo[$("#budget").value];
+    var platforms = Array.prototype.map.call(
+      document.querySelectorAll('input[name="platform"]:checked'), function (c) { return c.value; });
+
+    $("#err-product").hidden = !!product;
+    $("#err-audience").hidden = !!audience;
+    if (!product) { $("#product").focus(); return; }
+    if (!audience) { $("#audience").focus(); return; }
+
+    var o = objectiveInfo[obj];
+    var html = "";
+    html += "<h2>Campaign plan: " + esc(product) + "</h2>";
+    html += "<p>Objective: <strong>" + esc(obj) + "</strong>. Budget: " + esc(budget.label) + ".</p>";
+
+    html += "<h3>Creative angles to test</h3>";
+    angles(product, audience, obj).forEach(function (a) {
+      html += '<div class="angle"><strong>' + esc(a.name) + "</strong><span>" + esc(a.idea) + "</span></div>";
+    });
+
+    html += "<h3>Formats that suit this objective</h3><p>" + esc(o.format) + ".</p>";
+
+    html += "<h3>Testing plan</h3><ol>" +
+      "<li>" + esc(budget.split) + "</li>" +
+      "<li>" + esc(budget.test) + "</li>" +
+      "<li>" + esc(budget.days) + "</li>" +
+      "<li>" + esc(o.funnel) + "</li>" +
+      "<li>Keep the winner, pause the clear losers, and write down what you learned before the next round.</li>" +
+      "</ol>";
+
+    html += "<h3>Platform notes</h3><ul>" +
+      platformTips(platforms).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>";
+
+    html += "<h3>What to measure</h3><p>" + esc(o.metric) + ". Set your own targets from your margins, not from industry averages.</p>";
+
+    html += '<div class="note">These are ideas to test, not predictions. Check each platform\u2019s ad policies before publishing.</div>';
+    html += '<div class="actions"><button class="secondary" type="button" id="copy">Copy plan</button></div>';
+    show(html);
+  });
+
+  /* ---------- Read my data ---------- */
+  var previews = $("#previews");
+  $("#shots").addEventListener("change", function (e) {
+    previews.innerHTML = "";
+    Array.prototype.slice.call(e.target.files, 0, 8).forEach(function (f) {
+      if (!/^image\//.test(f.type)) return;
+      var fig = document.createElement("figure");
+      var img = document.createElement("img");
+      img.alt = "Uploaded screenshot: " + f.name;
+      img.src = URL.createObjectURL(f);
+      fig.appendChild(img);
+      previews.appendChild(fig);
+    });
+  });
+
+  var keyMap = [
+    ["spend", /(spend|cost|budget|amount spent)/i],
+    ["impressions", /(impressions|views|reach)/i],
+    ["clicks", /(clicks)/i],
+    ["conversions", /(conversions|purchases|leads|installs|sign[- ]?ups|orders)/i],
+    ["revenue", /(revenue|sales|income)/i]
+  ];
+
+  function parseStats(text) {
+    var out = {};
+    text.split(/\r?\n|;/).forEach(function (line) {
+      var m = line.match(/^\s*([A-Za-z][A-Za-z \-]*?)\s*[:=\-]\s*\$?\s*([\d.,]+)\s*(k|m)?/i);
+      if (!m) return;
+      var num = parseFloat(m[2].replace(/,/g, ""));
+      if (isNaN(num)) return;
+      if (m[3]) num *= m[3].toLowerCase() === "k" ? 1e3 : 1e6;
+      for (var i = 0; i < keyMap.length; i++) {
+        if (keyMap[i][1].test(m[1]) && out[keyMap[i][0]] === undefined) { out[keyMap[i][0]] = num; break; }
+      }
+    });
+    return out;
+  }
+
+  var fmt = function (n, d) { return n.toLocaleString(undefined, { maximumFractionDigits: d === undefined ? 2 : d }); };
+
+  panelRead.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var context = $("#context").value.trim();
+    var statsText = $("#stats").value.trim();
+    var fileCount = $("#shots").files.length;
+    var s = parseStats(statsText);
+    var rows = [], reads = [], next = [];
+
+    if (s.impressions && s.clicks) {
+      var ctr = s.clicks / s.impressions * 100;
+      rows.push(["Click-through rate", fmt(ctr) + "%"]);
+      reads.push(ctr < 0.8
+        ? "Click-through is on the low side. The creative or first line may not be earning attention. Test new hooks."
+        : "Click-through looks reasonable. If results still disappoint, look at what happens after the click.");
+    }
+    if (s.spend && s.clicks) {
+      rows.push(["Cost per click", fmt(s.spend / s.clicks)]);
+    }
+    if (s.spend && s.impressions) {
+      rows.push(["Cost per 1,000 impressions", fmt(s.spend / s.impressions * 1000)]);
+    }
+    if (s.clicks && s.conversions) {
+      var cr = s.conversions / s.clicks * 100;
+      rows.push(["Conversion rate (per click)", fmt(cr) + "%"]);
+      reads.push(cr < 1.5
+        ? "Many clicks are not converting. Check the landing page, offer clarity, load speed on mobile, and whether the ad promise matches the page."
+        : "Clicks are converting at a healthy pace for most offers. Focus on scaling carefully.");
+    }
+    if (s.spend && s.conversions) {
+      rows.push(["Cost per conversion", fmt(s.spend / s.conversions)]);
+    }
+    if (s.spend && s.revenue) {
+      var roas = s.revenue / s.spend;
+      rows.push(["Return on ad spend", fmt(roas) + "x"]);
+      reads.push(roas < 1
+        ? "Revenue is below spend. Compare with your margins before deciding; some businesses accept this for new customers, many cannot."
+        : "Revenue exceeds spend. Check this against your margins and costs to see whether it is profitable.");
+    }
+
+    if (!rows.length) {
+      reads.push("No usable numbers found. Add lines like \u201CSpend: 120\u201D, \u201CImpressions: 18000\u201D, \u201CClicks: 240\u201D, \u201CConversions: 6\u201D.");
+    }
+
+    next.push("Change one thing at a time (hook, image, offer, or audience) so you know what caused any change.");
+    next.push("Look at the comments: repeated questions are objections your next ad should answer.");
+    next.push("Wait for enough results before deciding. A handful of conversions can mislead.");
+
+    var html = "<h2>Your campaign read</h2>";
+    if (context) html += "<p><strong>Context:</strong> " + esc(context) + "</p>";
+    if (rows.length) {
+      html += '<div class="scroll"><table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>' +
+        rows.map(function (r) { return "<tr><td>" + esc(r[0]) + "</td><td>" + esc(r[1]) + "</td></tr>"; }).join("") +
+        "</tbody></table></div>";
+    }
+    html += "<h3>What it suggests</h3><ul>" + reads.map(function (r) { return "<li>" + esc(r) + "</li>"; }).join("") + "</ul>";
+    html += "<h3>What to try next</h3><ul>" + next.map(function (r) { return "<li>" + esc(r) + "</li>"; }).join("") + "</ul>";
+    if (fileCount) {
+      html += '<div class="note">' + fileCount + " screenshot" + (fileCount > 1 ? "s were" : " was") +
+        " added for your reference. This page does not read images; type key numbers and comments into the text box to include them.</div>";
+    }
+    html += '<div class="note">This is a rough read of the numbers you entered, not a forecast.</div>';
+    html += '<div class="actions"><button class="secondary" type="button" id="copy">Copy read</button></div>';
+    show(html);
+  });
+
+  /* ---------- Shared ---------- */
+  function show(html) {
+    result.innerHTML = html;
+    result.hidden = false;
+    result.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+    var btn = $("#copy");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        var text = result.innerText.replace(/Copy (plan|read)/, "").trim();
+        var done = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy"; }, 1500); };
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, done); else done();
+      });
+    }
+  }
 })();
-$("go").onclick = run;
 </script>
 </body>
 </html>
