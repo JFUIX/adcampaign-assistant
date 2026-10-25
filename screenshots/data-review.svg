@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1000" viewBox="0 0 1440 1000">
+<rect width="1440" height="1000" fill="#faf8f5"/><rect width="1440" height="14" fill="#c2410c"/>
+<g font-family="Inter,Segoe UI,Arial,sans-serif" fill="#1f1d1a">
+<text x="720" y="100" text-anchor="middle" font-size="18" font-weight="700" fill="#c2410c" letter-spacing="3">JFUIX · AI TOOL</text>
+<text x="720" y="158" text-anchor="middle" font-size="44" font-weight="750" letter-spacing="-1.2">Ad Campaign Assistant</text>
+<text x="720" y="198" text-anchor="middle" font-size="19" fill="#6b665f">Turn visible campaign data into themes, questions, and next steps.</text>
+<rect x="390" y="240" width="320" height="60" rx="12" fill="#fff" stroke="#e4dfd7" stroke-width="2"/><text x="550" y="277" text-anchor="middle" font-size="18" font-weight="650">Plan a campaign</text>
+<rect x="718" y="240" width="332" height="60" rx="12" fill="#c2410c"/><text x="884" y="277" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Read my data</text>
+<rect x="350" y="332" width="740" height="580" rx="20" fill="#fff" stroke="#e4dfd7" stroke-width="2"/>
+<text x="390" y="382" font-size="24" font-weight="750">Review campaign data</text>
+<text x="390" y="412" font-size="15" fill="#6b665f">Upload screenshots or paste metrics and comments.</text>
+<text x="390" y="462" font-size="16" font-weight="650">Campaign context</text>
+<rect x="390" y="475" width="660" height="48" rx="9" fill="#faf8f5" stroke="#e4dfd7" stroke-width="2"/>
+<text x="408" y="505" font-size="16" fill="#8c867e">e.g. Meta conversion campaign, 2 weeks old</text>
+<text x="390" y="558" font-size="16" font-weight="650">Screenshots of the post, comments and stats</text>
+<rect x="390" y="574" width="660" height="88" rx="10" fill="#faf8f5" stroke="#e4dfd7" stroke-width="2" stroke-dasharray="6 5"/>
+<rect x="420" y="596" width="42" height="42" rx="9" fill="#f4e5dc"/><path d="M431 625 l8 -9 6 6 5 -5 7 8" fill="none" stroke="#c2410c" stroke-width="2"/><circle cx="442" cy="606" r="3" fill="#c2410c"/>
+<text x="480" y="610" font-size="16" font-weight="650">Choose image files</text><text x="480" y="635" font-size="14" fill="#6b665f">Post, comments, and campaign stats</text>
+<text x="390" y="704" font-size="16" font-weight="650">Comments or numbers as text (optional)</text>
+<rect x="390" y="720" width="660" height="104" rx="9" fill="#faf8f5" stroke="#e4dfd7" stroke-width="2"/>
+<text x="408" y="752" font-size="16" fill="#8c867e">Paste comments, impressions, clicks, spend, conversions…</text>
+<rect x="390" y="848" width="660" height="48" rx="10" fill="#c2410c"/><text x="720" y="878" text-anchor="middle" font-size="17" font-weight="750" fill="#fff">Generate analysis</text>
+</g>
+<text x="720" y="963" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" fill="#6b665f">Analysis is limited to the information you provide. No performance promises.</text>
+</svg>
